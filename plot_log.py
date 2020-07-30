@@ -16,7 +16,6 @@ bot_log = RobotLog(log_file_name)
 
 log = bot_log.log[botNum]
 
-breakpoint()
 qNum = list(set(log['qNum']))[0]
 
 numplots = qNum
