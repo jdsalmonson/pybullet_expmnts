@@ -5,12 +5,18 @@ import pylab as plt
 
 from robotlog import RobotLog
 
+'''
 log_file_name = "LOG_IK_0001.txt"
+botNum = 1
+'''
+log_file_name = "LOG_IK_PANDA_0001.txt"
+botNum = 7
+
 bot_log = RobotLog(log_file_name)
 
-botNum = 1
 log = bot_log.log[botNum]
 
+breakpoint()
 qNum = list(set(log['qNum']))[0]
 
 numplots = qNum
