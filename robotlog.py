@@ -3,12 +3,13 @@ import struct
 from collections import defaultdict
 
 class RobotLog(object):
-    def __init__(self, filename):
+    def __init__(self, filename, verbose = True):
         self.filename = filename
+        self.verbose = verbose
 
         self.log = self.readLogFile()
 
-    def readLogFile(self, verbose=True):
+    def readLogFile(self):
         f = open(self.filename, 'rb')
 
         print(f'Opened: {self.filename}')
@@ -21,7 +22,7 @@ class RobotLog(object):
         # The type number of one record
         ncols = len(fmt)
 
-        if verbose:
+        if self.verbose:
             print(f'Keys: {keys}')
             print(f'Format: {fmt}')
             print(f'Size: {sz}')
@@ -51,7 +52,7 @@ class RobotLog(object):
             record.append(values[i])
             log.append(record)
 
-            if verbose:
+            if self.verbose:
                 print(f"Robot IDs: {list(set([x[2] for x in log]))}")
                 return log
         '''
