@@ -12,7 +12,8 @@ class RobotLog(object):
     def readLogFile(self):
         f = open(self.filename, 'rb')
 
-        print(f'Opened: {self.filename}')
+        if self.verbose:
+            print(f'Opened: {self.filename}')
 
         keys = f.readline().decode('utf8').rstrip('\n').split(',')
         fmt = f.readline().decode('utf8').rstrip('\n')
