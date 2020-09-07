@@ -4,7 +4,10 @@ from collections import defaultdict
 
 from robotlog import RobotLog
 
-log_file_name = "LOG_IK_0001.txt"
+#log_file_name = "LOG_IK_0001.txt"
+#log_file_stem = "LOG00010"
+log_file_stem = "kuka0002"
+log_file_name = f"logs/{log_file_stem}.slog"
 bot_log = RobotLog(log_file_name).log
 
 #clid = p.connect(p.SHARED_MEMORY)

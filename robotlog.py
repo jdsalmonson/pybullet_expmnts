@@ -60,6 +60,9 @@ class RobotLog(object):
 
 if __name__ == "__main__":
     #log_file_name = "/home/jay/stash/bullet3/examples/pybullet/examples/data/block_grasp_log.bin"
-    log_file_name = "LOG0001.txt"
+
+    log_file_stem = "LOG00010"
+    #log_file_stem = "kuka0002"
+    log_file_name = f"logs/{log_file_stem}.slog"
 
     bot_log = RobotLog(log_file_name)

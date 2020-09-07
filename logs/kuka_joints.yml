@@ -1,0 +1,56 @@
+0:
+  friction: 0.5
+  maxForce: 300.0
+  name: lbr_iiwa_joint_1
+  range: !!python/tuple
+  - -2.96705972839
+  - 2.96705972839
+  torque: 320.0
+1:
+  friction: 0.5
+  maxForce: 300.0
+  name: lbr_iiwa_joint_2
+  range: !!python/tuple
+  - -2.09439510239
+  - 2.09439510239
+  torque: 320.0
+2:
+  friction: 0.5
+  maxForce: 300.0
+  name: lbr_iiwa_joint_3
+  range: !!python/tuple
+  - -2.96705972839
+  - 2.96705972839
+  torque: 176.0
+3:
+  friction: 0.5
+  maxForce: 300.0
+  name: lbr_iiwa_joint_4
+  range: !!python/tuple
+  - -2.09439510239
+  - 2.09439510239
+  torque: 176.0
+4:
+  friction: 0.5
+  maxForce: 300.0
+  name: lbr_iiwa_joint_5
+  range: !!python/tuple
+  - -2.96705972839
+  - 2.96705972839
+  torque: 110.0
+5:
+  friction: 0.5
+  maxForce: 300.0
+  name: lbr_iiwa_joint_6
+  range: !!python/tuple
+  - -2.09439510239
+  - 2.09439510239
+  torque: 40.0
+6:
+  friction: 0.5
+  maxForce: 300.0
+  name: lbr_iiwa_joint_7
+  range: !!python/tuple
+  - -3.05432619099
+  - 3.05432619099
+  torque: 40.0
