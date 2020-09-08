@@ -5,7 +5,8 @@ import pylab as plt
 
 from robotlog import RobotLog
 
-log_file_name = "LOG00010.txt" #"LOG_IK_0001.txt"
+log_file_name = "logs/LOG00010.slog" #"LOG_IK_0001.txt"
+#log_file_name = "logs/LOG_IK_0001.slog"
 botNum = 1
 '''
 log_file_name = "LOG_IK_PANDA_0001.txt"
@@ -69,7 +70,7 @@ for iplt in range(numplots):
     if torque_key in log.keys():
         #axs[rw, cl].plot(tmstmp, smooth(np.array(log[torque_key]), window_len=2)/10, label = "torque/10")
         #pla.extend( axs[rw, cl].plot(tmstmp, smooth(np.array(log[torque_key]), window_len=11), label = "smooth torque") )
-        pla.extend( axs[rw, cl].plot(tmstmp, np.array(log[torque_key]), label = "torque") )
+        pla.extend( axs[rw, cl].plot(tmstmp, np.array(log[torque_key]) / 10., label = "torque/10") )
 
     # assemble list of plots & legends from first plot,
     # otherwise sometimes matplotlib doesn't get the plot legends
