@@ -1,10 +1,17 @@
 import pybullet as p
 import time
 import math
+import random
 from datetime import datetime
 from time import sleep
 
 import pybullet_data
+
+x0, y0, z0 = [random.uniform(0, 0.5) for _ in range(3)]
+a_x, a_y, a_z = [random.uniform(0, 0.2) for _ in range(3)]
+w_x, w_y, w_z = [random.uniform(-4, 4) for _ in range(3)]
+
+log_file = "logs/kuka_ik_0011.slog"
 
 p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -29,7 +36,11 @@ t = 0
 trailDuration = 15
 hasPrevPose = 0
 
-logId1 = p.startStateLogging(p.STATE_LOGGING_GENERIC_ROBOT, "LOG_IK_0001.txt", [kukaId])
+logId1 = p.startStateLogging(p.STATE_LOGGING_GENERIC_ROBOT,
+                             log_file,
+                             [kukaId],
+                             logFlags = p.STATE_LOG_JOINT_TORQUES,
+                             )
 
 while 1:
     if (useRealTimeSimulation):
@@ -45,9 +56,15 @@ while 1:
     #orn = p.getQuaternionFromEuler([0, 0, math.pi])
     # Raster goal position:
     #pos = [-0.4,0.2*math.cos(t),0.+0.2*math.sin(2*t)]
+    '''
     pos = [-0.5 + 0.2 * math.cos(3*t),
            0.1 * math.cos(4*t),
            0. + 0.2 * math.sin(t) + 0.7
+           ]
+    '''
+    pos = [-x0 + a_x * math.cos(w_x*t),
+           y0 + a_y * math.cos(w_y*t),
+           z0 + a_z * math.cos(w_z*t),
            ]
     # end effector angle (down: -pi, horizontal: -pi/2, up: 0
     ee_angle = -math.pi / 2

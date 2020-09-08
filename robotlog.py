@@ -62,6 +62,7 @@ if __name__ == "__main__":
     #log_file_name = "/home/jay/stash/bullet3/examples/pybullet/examples/data/block_grasp_log.bin"
 
     log_file_stem = "LOG00010"
+    #log_file_stem = "LOG_IK_0001"
     #log_file_stem = "kuka0002"
     log_file_name = f"logs/{log_file_stem}.slog"
 
