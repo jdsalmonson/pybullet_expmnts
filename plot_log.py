@@ -5,7 +5,8 @@ import pylab as plt
 
 from robotlog import RobotLog
 
-log_file_name = "logs/LOG00010.slog" #"LOG_IK_0001.txt"
+log_stem = "kuka0004"
+log_file_name = f"logs/{log_stem}.slog" #"LOG00010" #"LOG_IK_0001.txt"
 #log_file_name = "logs/LOG_IK_0001.slog"
 botNum = 1
 '''
@@ -44,7 +45,7 @@ tmstmp = np.array(log['timeStamp'])
 tmstmpz = ave(tmstmp)
 
 fig, axs = plt.subplots(rows, cols, figsize = (15, 8), sharex = True)
-fig.suptitle("Position and Velocity of joints as a function of time stamp")
+fig.suptitle(f"file stem: {log_stem}\nPosition and Velocity of joints as a function of time stamp")
 for iplt in range(numplots):
 
     rw, cl = divmod(iplt, cols)
