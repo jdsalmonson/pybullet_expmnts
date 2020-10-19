@@ -10,7 +10,11 @@ import time
 import math
 import numpy as np
 
-log_file = "logs/kuka0006.slog"
+#log_file = "logs/kuka0001.slog"
+log_stem = "logs/kuka0012"
+make_joint_log = True   # assemble log info from getJointStates() into *h5 file
+log_file = log_stem + ".slog"
+jointlog_file = log_stem + ".h5"
 
 physId = p.connect(p.SHARED_MEMORY)
 if (physId<0):
@@ -117,17 +121,39 @@ logId1 = p.startStateLogging(p.STATE_LOGGING_GENERIC_ROBOT,
                              logFlags = p.STATE_LOG_JOINT_TORQUES,
                              )
 
+if make_joint_log:
+    import numpy as np
+    from qnd.h5f import openh5
+
+    # turn on torque sensing recorded in getJointStates():
+    for jointIndex in range(p.getNumJoints(kuka)):
+        p.enableJointForceTorqueSensor(kuka, jointIndex)
+
+    # initialize qnd logfile:
+    jlog = openh5(jointlog_file, "w")
+    jlog.recording(1)
+
 while p.isConnected():
-	keys = p.getKeyboardEvents()
+    keys = p.getKeyboardEvents()
 
-	for k in my_keys:
-		if k.ord in keys and keys[k.ord] & p.KEY_IS_DOWN: #WAS_TRIGGERED:
-			print(f"{k.key} was pressed")
-			torque = k.torque
-		else:
-			torque = 0.
-		time.sleep(0.01)
-		p.setJointMotorControl2(kuka, k.joint, p.VELOCITY_CONTROL, targetVelocity = 0, force = 0.1)
-		p.setJointMotorControl2(kuka, k.joint, p.TORQUE_CONTROL, force=torque)
+    appliedtorques = [0]*p.getNumJoints(kuka)
+    for k in my_keys:
+        if k.ord in keys and keys[k.ord] & p.KEY_IS_DOWN: #WAS_TRIGGERED:
+            print(f"{k.key} was pressed")
+            torque = k.torque
+            appliedtorques[k.joint] = torque
+        else:
+            torque = 0.
+        time.sleep(0.01)
+        p.setJointMotorControl2(kuka, k.joint, p.VELOCITY_CONTROL, targetVelocity = 0, force = 0.1)
+        p.setJointMotorControl2(kuka, k.joint, p.TORQUE_CONTROL, force=torque)
 
-	p.stepSimulation()
+    p.stepSimulation()
+
+    if make_joint_log:
+        jsts = p.getJointStates(kuka, range(p.getNumJoints(kuka)))
+        jlog.q = [js[0] for js in jsts]  # joint position
+        jlog.u = [js[1] for js in jsts]  # joint velocity
+        jlog.t = [js[3] for js in jsts]  # joint motor torque
+        jlog.rf = np.asarray([js[2] for js in jsts])  # reaction forces [Fx, Fy, Fz, Mx, My, Mz]
+        jlog.at = appliedtorques

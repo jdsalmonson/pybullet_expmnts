@@ -7,11 +7,16 @@ from time import sleep
 
 import pybullet_data
 
+#random.seed(234)
+
 x0, y0, z0 = [random.uniform(0, 0.5) for _ in range(3)]
 a_x, a_y, a_z = [random.uniform(0, 0.2) for _ in range(3)]
 w_x, w_y, w_z = [random.uniform(-4, 4) for _ in range(3)]
 
-log_file = "logs/kuka_ik_0011.slog"
+log_stem = "logs/kuka_ik_0012"
+make_joint_log = True   # assemble log info from getJointStates() into *h5 file
+log_file = log_stem + ".slog"
+jointlog_file = log_stem + ".h5"
 
 p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -27,7 +32,7 @@ jd=[0.5,0.5,0.5,0.5,0.5,0.5,0.5]
 
 p.setGravity(0, 0, -9.81) #0)
 
-useRealTimeSimulation = 1
+useRealTimeSimulation = 0 #1
 p.setRealTimeSimulation(useRealTimeSimulation)
 t = 0
 
@@ -42,14 +47,27 @@ logId1 = p.startStateLogging(p.STATE_LOGGING_GENERIC_ROBOT,
                              logFlags = p.STATE_LOG_JOINT_TORQUES,
                              )
 
-while 1:
+if make_joint_log:
+    import numpy as np
+    from qnd.h5f import openh5
+
+    # turn on torque sensing recorded in getJointStates():
+    for jointIndex in range(p.getNumJoints(kukaId)):
+        p.enableJointForceTorqueSensor(kukaId, jointIndex)
+
+    # initialize qnd logfile:
+    jlog = openh5(jointlog_file, "w")
+    jlog.recording(1)
+
+for _ in range(3000): #while 1:
     if (useRealTimeSimulation):
         t = time.time()  #(dt, micro) = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f').split('.')
         #t = (dt.second/60.)*2.*math.pi
     else:
         p.stepSimulation()
-        sleep(0.05)
-        t = t + 0.001
+        #sleep(1./240.) #0.05)
+        t = t + 1./240. #0.001
+
 
     # Constant goal position:
     #pos = [0, 0, 1.26]
@@ -98,5 +116,12 @@ while 1:
     #prevPose = pos
     prevPose1 = ls[4]
     hasPrevPose = 1
+
+    if make_joint_log:
+        jsts = p.getJointStates(kukaId, range(p.getNumJoints(kukaId)))
+        jlog.q = [js[0] for js in jsts]  # joint position
+        jlog.u = [js[1] for js in jsts]  # joint velocity
+        jlog.t = [js[3] for js in jsts]  # joint motor torque
+        jlog.rf = np.asarray([js[2] for js in jsts])  # reaction forces [Fx, Fy, Fz, Mx, My, Mz]
 
     #sleep(0.05)

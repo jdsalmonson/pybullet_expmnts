@@ -1,6 +1,8 @@
 #import pybullet as p
+import os
 import struct
 from collections import defaultdict
+import numpy as np
 
 class RobotLog(object):
     def __init__(self, filename, verbose = True):
@@ -8,6 +10,7 @@ class RobotLog(object):
         self.verbose = verbose
 
         self.log = self.readLogFile()
+        self.jlog = self.readJointLogFile()
 
     def readLogFile(self):
         f = open(self.filename, 'rb')
@@ -47,6 +50,28 @@ class RobotLog(object):
 
         return log
 
+    def readJointLogFile(self):
+        jfilename = self.filename[:-5] + ".h5"
+
+        if not os.path.isfile(jfilename):
+            print(f"HDF5 file {jfilename} not found")
+            return
+
+        from qnd.h5f import openh5
+
+        f = openh5(jfilename, "r")
+
+        jlog = defaultdict(list)
+        for rec in f.gotoit():
+            for v in f:
+                jlog[v].append(f[v])
+
+        for v in jlog:
+            jlog[v] = np.asarray(jlog[v])
+
+        return jlog
+
+
         '''
         record = list()
         for i in range(ncols):
@@ -61,9 +86,14 @@ class RobotLog(object):
 if __name__ == "__main__":
     #log_file_name = "/home/jay/stash/bullet3/examples/pybullet/examples/data/block_grasp_log.bin"
 
-    log_file_stem = "LOG00010"
+    #log_file_stem = "LOG00010"
     #log_file_stem = "LOG_IK_0001"
     #log_file_stem = "kuka0002"
+    log_file_stem = "kuka_ik_0012"
     log_file_name = f"logs/{log_file_stem}.slog"
 
     bot_log = RobotLog(log_file_name)
+
+    print(len(bot_log.log[1]['q0']))
+    if hasattr(bot_log, "jlog") and bot_log.jlog is not None:
+        print(bot_log.jlog['q'].shape)
