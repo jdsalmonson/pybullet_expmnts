@@ -9,11 +9,15 @@ import pybullet_data
 
 #random.seed(234)
 
-x0, y0, z0 = [random.uniform(0, 0.5) for _ in range(3)]
-a_x, a_y, a_z = [random.uniform(0, 0.2) for _ in range(3)]
-w_x, w_y, w_z = [random.uniform(-4, 4) for _ in range(3)]
+x0, y0, z0 = [random.uniform(0.2, 0.5) for _ in range(3)]
+a_x, a_y, a_z = [random.uniform(0.2, 2.*0.2) for _ in range(3)]
+w_x, w_y, w_z = [random.uniform(-4*2, 4*2) for _ in range(3)]
 
-log_stem = "logs/kuka_ik_0012"
+print(x0, y0, z0)
+print(a_x, a_y, a_z)
+print(w_x, w_y, w_z)
+
+log_stem = "logs/kuka_ik_0020"
 make_joint_log = True   # assemble log info from getJointStates() into *h5 file
 log_file = log_stem + ".slog"
 jointlog_file = log_stem + ".h5"

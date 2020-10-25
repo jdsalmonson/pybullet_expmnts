@@ -151,7 +151,11 @@ p.setJointMotorControl2(kuka, 1, p.VELOCITY_CONTROL, force = 0.0)
 p.setJointMotorControl2(kuka, 2, p.VELOCITY_CONTROL, force = 0.0)
 p.setJointMotorControl2(kuka, 3, p.VELOCITY_CONTROL, force = 0.0)
 
-logId1 = p.startStateLogging(p.STATE_LOGGING_GENERIC_ROBOT, "LOG0001.txt", [kuka]) #[0, 1, 2, 3])
+logId1 = p.startStateLogging(p.STATE_LOGGING_GENERIC_ROBOT,
+                             "LOG0001.txt",
+                             [kuka],
+                             logFlags = p.STATE_LOG_JOINT_TORQUES,
+                             )
 
 while p.isConnected():
 	keys = p.getKeyboardEvents()

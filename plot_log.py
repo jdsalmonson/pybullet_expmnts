@@ -5,7 +5,7 @@ import pylab as plt
 
 from robotlog import RobotLog
 
-log_stem = "kuka_ik_0012" #"kuka0012" #"kuka_ik_0012" #"LOG_IK_0001" #"kuka0006"
+log_stem = "kuka_ik_0016" #"kuka0012" #"kuka_ik_0012" #"LOG_IK_0001" #"kuka0006"
 log_file_name = f"logs/{log_stem}.slog" #"LOG00010" #"LOG_IK_0001.txt"
 #log_file_name = "logs/LOG_IK_0001.slog"
 botNum = 1
@@ -73,7 +73,7 @@ for iplt in range(numplots):
         #pla.extend( axs[rw, cl].plot(tmstmp, smooth(np.array(log[torque_key]), window_len=11), label = "smooth torque") )
         pla.extend( axs[rw, cl].plot(tmstmp, np.array(log[torque_key]) / 10., label = "torque/10") )
 
-    if hasattr(bot_log, "jlog") and bot_log.jlog is not None:
+    if False: #hasattr(bot_log, "jlog") and bot_log.jlog is not None:
         # position, 'q', vel, 'u' and torque, 't', taken from getJointStates()
         tms = 1./240.*np.arange(len(bot_log.jlog['q'][:,iplt]))
         pla.extend(axs[rw, cl].plot(tms, bot_log.jlog['q'][:,iplt], label = "q jnt"))
