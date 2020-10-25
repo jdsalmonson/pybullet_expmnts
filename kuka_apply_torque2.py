@@ -23,54 +23,12 @@ p.loadURDF("plane.urdf")
 kuka = p.loadSDF("kuka_iiwa/kuka_with_gripper.sdf")[0]
 p.loadURDF("tray/tray.urdf", [1, 0, 0])
 
-'''
-# kuka = p.loadURDF("kuka_iiwa/model_vr_limits.urdf", 1.4, -0.2, 0.6, 0.0, 0.0, 0.0, 1.0)
-kuka = p.loadURDF("kuka_iiwa/model.urdf", [0, 0, 1], useFixedBase=True)
-p.resetBasePositionAndOrientation(kuka, [0, 0, 0], [0, 0, 0, 1])
-'''
-
-'''
-#restposes for null space
-rp = [0, 0, 0, 0.5 * math.pi, 0, -math.pi * 0.5 * 0.66, 0]
-for i, restpose in enumerate(rp):
-  p.resetJointState(kuka, i, restpose)
-
-jointPositions = [-0.000000, -0.000000, 0.000000, 1.570793, 0.000000, -1.036725, 0.000001]
-for jointIndex in range(p.getNumJoints(kuka)):
-	p.resetJointState(kuka, jointIndex, jointPositions[jointIndex])
-	p.setJointMotorControl2(kuka, jointIndex, p.POSITION_CONTROL, jointPositions[jointIndex], 0)
-
-kuka_gripper = p.loadSDF("gripper/wsg50_one_motor_gripper_new_free_base.sdf")[0]
-
-# position kuka_gripper and constrain it to the base kuka robot:
-p.resetBasePositionAndOrientation(kuka_gripper, [0.923103, -0.200000, 1.250036],
-                                  [-0.000000, 0.964531, -0.000002, -0.263970])
-
-jointPositions = [
-    0.000000, -0.011130, -0.206421, 0.205143, -0.009999, 0.000000, -0.010055, 0.000000
-]
-#for jointIndex in range(p.getNumJoints(kuka_gripper)):
-  #p.resetJointState(kuka_gripper, jointIndex, jointPositions[jointIndex])
-  #p.setJointMotorControl2(kuka_gripper, jointIndex, p.POSITION_CONTROL, jointPositions[jointIndex], 0)
-'''
-'''
-kuka_cid = p.createConstraint(kuka, 6, kuka_gripper, 0, p.JOINT_FIXED, [0, 0, 0], [0, 0, 0.05],
-                              [0, 0, 0])
-'''
-
 p.loadURDF("lego/lego.urdf", -0.5, -0.3, 0.7, 0.0, 0., 0.0, 1.0)
 p.loadURDF("lego/lego.urdf", -0.5, -0.3, 0.8, 0.0, 0., 0.0, 1.0)
 p.loadURDF("lego/lego.urdf", -0.5, -0.3, 0.9, 0.0, 0., 0.0, 1.0)
 
 for ijenga in range(6):
     p.loadURDF("jenga/jenga.urdf", 0.3 - 0.1*ijenga, 0.7, 0.75, 0.0, 0.707107, 0.0, 0.707107)
-
-'''
-table = p.loadURDF("table_square/table_square.urdf", -1.0, 0.0, 0., 0.0,  0., 0.0, 1.0)
-jointPositions = [0.000000]
-for jointIndex in range(p.getNumJoints(table)):
-  p.resetJointState(table, jointIndex, jointPositions[jointIndex])
-'''
 
 # get object names:
 obj_names = {}
