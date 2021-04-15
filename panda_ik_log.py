@@ -35,6 +35,13 @@ pandaEndEffectorIndex = 7
 
 jd=[0.5]*12
 
+# start logging w/o real-time simulation to ensure logs are in sync:
+p.setRealTimeSimulation(0)
+logId1 = p.startStateLogging(p.STATE_LOGGING_GENERIC_ROBOT,
+                             "LOG_IK_PANDA_0001.txt",
+                             [robot],
+                             logFlags = p.STATE_LOG_JOINT_TORQUES)
+
 useRealTimeSimulation = 1
 p.setRealTimeSimulation(useRealTimeSimulation)
 t = 0
@@ -43,8 +50,6 @@ t = 0
 #use 0 for no-removal
 trailDuration = 15
 hasPrevPose = 0
-
-logId1 = p.startStateLogging(p.STATE_LOGGING_GENERIC_ROBOT, "LOG_IK_PANDA_0001.txt", [robot])
 
 while 1:
     if (useRealTimeSimulation):
@@ -60,9 +65,9 @@ while 1:
     #orn = p.getQuaternionFromEuler([0, 0, math.pi])
     # Raster goal position:
     #pos = [-0.4,0.2*math.cos(t),0.+0.2*math.sin(2*t)]
-    pos = [0. + 0.2 * math.cos(3*t),  # left/right of tray
-           0.5 + 0.2 * math.cos(4*t), # vertical
-           -0.5 + 0.2 * math.sin(t),   # out to tray (<0)
+    pos = [0. + 0.2 * math.cos(3*t/2),  # left/right of tray
+           0.5 + 0.2 * math.cos(4*t/2), # vertical
+           -0.5 + 0.2 * math.sin(t/2),   # out to tray (<0)
            ]
     # end effector angle (down: -pi, horizontal: -pi/2, up: 0
     ee_angle = math.pi
@@ -83,7 +88,7 @@ while 1:
                                 targetPosition=jointPoses[i],
                                 #targetVelocity=0,
                                 force=500,
-                                positionGain=0.03,
+                                positionGain=0.1, #0.03,
                                 velocityGain=1
                                 )
 
